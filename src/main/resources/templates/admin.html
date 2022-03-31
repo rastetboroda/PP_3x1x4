@@ -20,6 +20,7 @@
 
     <div class="row vh-100">
 
+<!--        Панель сбоку (админ-юзер или юзер)-->
         <div class="col-lg-2 pl-0 pr-0 pt-3 bg-white">
             <nav class="nav nav-pills flex-column">
                 <div sec:authorize="hasAuthority('ADMIN')">
@@ -129,16 +130,19 @@
                                                            id="password"
                                                            name="password">
                                                 </div>
-                                                <div class="form-group text-center">
-                                                    <label for="roles1" class="center-block">
-                                                        <span class="font-weight-bold">Role</span>
-                                                    </label>
-                                                    <select id="roles1" class="form-control custom-select" size="2"
-                                                            name="newRoles"
-                                                            multiple="multiple">
-                                                        <option selected="selected" value="USER">USER</option>
-                                                        <option value="ADMIN">ADMIN</option>
+                                                <div>
+                                                    <label for="roles1" class=" font-weight-bold">Roles:</label>
+                                                    <div>
+                                                    <select class="form-select w-100"
+                                                            multiple size="3"
+                                                            id="roles1"
+                                                            name="rolesBox">
+                                                        <option th:each="role : ${roles}"
+                                                                th:value="${role.id}"
+                                                                th:text="${role.name}"></option>
                                                     </select>
+                                                    </div>
+>
                                                     <input name="id" type="hidden" id="editId">
                                                 </div>
                                                 <div class="modal-footer">
@@ -169,7 +173,7 @@
 
                                             <div class="modal-header">
                                                 <h5 class="modal-title"
-                                                    id="deleteModal1">Delete
+                                                    id="deleteId">Delete
                                                     user</h5>
                                                 <button type="button" class="close" data-dismiss="modal"
                                                         aria-label="Close">
@@ -218,28 +222,26 @@
                                                            readonly="readonly">
                                                 </div>
                                                 <div class="form-group text-center">
-                                                    <label for="password1" class="center-block">
+                                                    <label for="password2" class="center-block">
                                                         <span class="font-weight-bold">Password</span>
                                                     </label>
                                                     <input type="password"
                                                            class="form-control collection-ville text-center"
-                                                           id="password1"
+                                                           id="password2"
                                                            name="password"
                                                            readonly="readonly">
                                                 </div>
                                                 <div class="form-group text-center">
-                                                    <label for="roles2" class="center-block">
+                                                    <label for="role2" class="center-block">
                                                         <span class="font-weight-bold">Role</span>
                                                     </label>
-                                                    <select id="roles2" class="form-control custom-select" size="2"
-                                                            name="newRoles"
-                                                            multiple="multiple" readonly="readonly">
-                                                        <option value="USER" readonly="readonly">USER</option>
-                                                        <option value="ADMIN" readonly="readonly">ADMIN</option>
-                                                    </select>
-                                                    <input name="id" type="hidden"
-                                                           id="deleteId">
+                                                    <input type="role"
+                                                           class="form-control text-center"
+                                                           id="role2"
+                                                           name="Role" th:value="${user.getStringRoles()}"
+                                                           readonly="readonly">
                                                 </div>
+
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"
                                                             data-dismiss="modal">
@@ -297,13 +299,22 @@
                                             </div>
                                             <div>
                                                 <label for="roles" class=" font-weight-bold">Roles:</label>
-                                                <select class="form-control custom-select" size="2" id="roles"
-                                                        name="roles"
-                                                        multiple="multiple">
-                                                    <option selected="selected" value="USER">USER</option>
-                                                    <option value="ADMIN">ADMIN</option>
+                                                <select class="form-select w-100" size="3" id="roles"
+                                                        name="rolesBox">
+                                                    <option th:each="role : ${roles}"
+                                                            th:value="${role.id}"
+                                                            th:text="${role.name}"></option>
                                                 </select>
                                             </div>
+<!--                                            <div>-->
+<!--                                                <label for="roles" class=" font-weight-bold">Roles:</label>-->
+<!--                                                <select class="form-control custom-select" size="2" id="roles"-->
+<!--                                                        name="roles"-->
+<!--                                                        multiple="multiple">-->
+<!--                                                    <option selected="selected" value="USER">USER</option>-->
+<!--                                                    <option value="ADMIN">ADMIN</option>-->
+<!--                                                </select>-->
+<!--                                            </div>-->
                                             <br>
                                             <div>
                                                 <button type="button" onclick="addUser()" class="btn btn-success ">Add new user</button>

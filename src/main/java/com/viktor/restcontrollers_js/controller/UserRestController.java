@@ -1,12 +1,17 @@
 package com.viktor.restcontrollers_js.controller;
 
+import com.viktor.restcontrollers_js.model.Role;
 import com.viktor.restcontrollers_js.model.User;
+import com.viktor.restcontrollers_js.service.RoleService;
 import com.viktor.restcontrollers_js.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RequestMapping("/api")
@@ -14,16 +19,16 @@ import org.springframework.web.bind.annotation.*;
 public class UserRestController {
 
     private UserService userService;
+    private RoleService roleService;
 
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/users")
-    public ResponseEntity<User> saveUser(@RequestBody User user) {
-        userService.save(user);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+    @Autowired
+    public void setRoleService(RoleService roleService) {
+        this.roleService = roleService;
     }
 
     @GetMapping(value = "/users")
@@ -42,13 +47,10 @@ public class UserRestController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @DeleteMapping(value = "/users/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable("id") int id) {
-        userService.deleteById(id);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
-
+    @PostMapping(value = "/users")
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
+        userService.save(user);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/users")
@@ -59,6 +61,30 @@ public class UserRestController {
         userService.updateUser(user);
         return new ResponseEntity<>(user, new HttpHeaders(), HttpStatus.OK);
     }
+
+
+    @DeleteMapping(value = "/users/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") int id) {
+        userService.deleteById(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+//    _____________________________________________________________
+
+    @GetMapping("/userInfo")
+    public ResponseEntity<User> showUserById(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(userService.findById(user.getId()));
+    }
+    @GetMapping("/roles")
+    ResponseEntity<List<Role>>getAllRoles(){
+        return new ResponseEntity<>(roleService.getAllRoles(), HttpStatus.OK);
+    }
+    @GetMapping("/roles/{id}")
+    ResponseEntity<Role> getRoleById(@PathVariable("id") int id){
+        return new ResponseEntity<>(roleService.getRoleById(id), HttpStatus.OK);
+    }
+
 }
 
 

@@ -33,7 +33,7 @@ public class User implements UserDetails {
     @Column
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     Set<Role> roles;
 
     public User() {
