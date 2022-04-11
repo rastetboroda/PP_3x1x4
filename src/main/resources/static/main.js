@@ -50,7 +50,7 @@ function editUser() {
     user.email = $("#email").val();
     user.password = $("#password").val();
     user.id = $("#editId").val();
-    user.roles = getRoles(Array.from(document.getElementById('roles').selectedOptions))
+    user.roles = getRoles(Array.from(document.getElementById('editRoles').selectedOptions))
         $.ajax("/api/users", {
             method: "PUT",
             contentType: "application/json; charset=utf-8",
@@ -96,7 +96,7 @@ function userForEdit(obj) {
             $("#age").val(user.age);
             $("#email").val(user.email);
             $("#password").val(user.password);
-            $("#roles:selected").val(user.roles);
+            $("#editRoles:selected").val(user.roles);
             $("#editId").val(user.id);
             $("#editButton").val(user.id);
         },
@@ -125,7 +125,7 @@ function userForDelete(obj) {
             $("#age2").val(user.age);
             $("#email2").val(user.email);
             $("#password2").val(user.password);
-            $("#roles2").val(user.role);
+            $("#delRoles").val(user.role);
             $("#deleteId").val(user.id);
             $("#deleteButton").val(user.id);
         },
@@ -150,7 +150,7 @@ function addUser() {
                 age: $("#inputAge").val(),
                 email: $("#inputEmail").val(),
                 password: $("#inputPassword").val(),
-                roles: getRoles(Array.from(document.getElementById('roles').selectedOptions))
+                roles: getRoles(Array.from(document.getElementById('addRoles').selectedOptions))
             }),
 
         dataType: "json",
@@ -211,7 +211,7 @@ function createRows(user) {
     userData += '<td>';
     let roles = user.authorities;
     for (let role of roles) {
-        userData += role.name.replace('ROLE_', '') + ' ';
+        userData += role.name + ' ';
     }
     userData += '</td>' +
         '<td>' + '<input id="btnEdit" value="Edit" type="button" ' +
@@ -230,6 +230,25 @@ function getRoles(list) {
     });
     return roles;
 }
+
+function getAllRoles(){
+    fetch("/roles")
+        .then(res => res.json())
+        .then(roles => {
+            let temp = '';
+            roles.forEach(function (role){
+                temp +=`
+                <option value = "${role.id}">${role.name}<option>
+                `
+            });
+            document.getElementById("addRoles").innerHTML = temp;
+            document.getElementById("editRoles").innerHTML = temp;
+            document.getElementById("delRoles").innerHTML = temp;
+
+
+        });
+}
+getAllRoles()
 
 
 

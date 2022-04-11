@@ -8,7 +8,10 @@ import org.springframework.context.annotation.ComponentScan;
 public class RestcontrollersJsApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(RestcontrollersJsApplication.class, args);
+
     }
 
-}
+
+    }

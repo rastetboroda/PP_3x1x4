@@ -81,8 +81,8 @@ public class UserRestController {
         return new ResponseEntity<>(roleService.getAllRoles(), HttpStatus.OK);
     }
     @GetMapping("/roles/{id}")
-    ResponseEntity<Role> getRoleById(@PathVariable("id") int id){
-        return new ResponseEntity<>(roleService.getRoleById(id), HttpStatus.OK);
+    ResponseEntity<Role> getRoleById(@PathVariable("id") Long id){
+        return new ResponseEntity<>(roleService.findById(id), HttpStatus.OK);
     }
 
 }
