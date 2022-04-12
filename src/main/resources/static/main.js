@@ -4,10 +4,29 @@ function userRoles(array) {
     let string = "";
     const length = array.length;
     for (let index = 0; index < length; index++) {
-        string = string + " " + array[index].name;
+        string = string + " " + array[index].role;
     }
     return string;
 }
+
+
+function getAllRoles(){
+    fetch("/roles")
+        .then(res => res.json())
+        .then(roles => {
+            let temp = '';
+            Array.from(roles).forEach(function (role){
+                temp +=`
+                <option value = "${role.id}">${role.role}<option>
+                `
+            });
+            document.getElementById("addRoles").innerHTML = temp;
+            document.getElementById("editRoles").innerHTML = temp;
+            document.getElementById("delRoles").innerHTML = temp;
+
+        });
+}
+getAllRoles()
 
 $(document).ready(function () {
     loadTable();
@@ -15,7 +34,7 @@ $(document).ready(function () {
 
 function loadTable() {
 
-    $.ajax("/api/users", {
+    $.ajax("/users", {
         method: "GET",
         dataType: "json",
         success: function (msg) {
@@ -51,7 +70,7 @@ function editUser() {
     user.password = $("#password").val();
     user.id = $("#editId").val();
     user.roles = getRoles(Array.from(document.getElementById('editRoles').selectedOptions))
-        $.ajax("/api/users", {
+        $.ajax("/users", {
             method: "PUT",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -85,7 +104,7 @@ function userForEdit(obj) {
     $.ajax({
         type: "GET",
         contentType: "application/json",
-        url: "/api/users/" + user_id,
+        url: "/users/" + user_id,
         dataType: 'json',
         timeout: 100000,
         success: function (data) {
@@ -114,7 +133,7 @@ function userForDelete(obj) {
     $.ajax({
         type: "GET",
         contentType: "application/json",
-        url: "/api/users/" + user_id,
+        url: "users/" + user_id,
         dataType: 'json',
         timeout: 100000,
         success: function (data) {
@@ -140,7 +159,7 @@ function userForDelete(obj) {
 
 
 function addUser() {
-    $.ajax("/api/users", {
+    $.ajax("/users", {
         method: "post",
         contentType: "application/json",
         data: JSON.stringify(
@@ -176,7 +195,7 @@ function deleteUser() {
     $.ajax({
         type: "DELETE",
         contentType: "application/json",
-        url: "/api/users/" + $("#deleteId").val(),
+        url: "/users/" + $("#deleteId").val(),
         data: $("#deleteId").val(),
         dataType: 'json',
         timeout: 100000,
@@ -211,7 +230,7 @@ function createRows(user) {
     userData += '<td>';
     let roles = user.authorities;
     for (let role of roles) {
-        userData += role.name + ' ';
+        userData += role.role + ' ';
     }
     userData += '</td>' +
         '<td>' + '<input id="btnEdit" value="Edit" type="button" ' +
@@ -231,24 +250,7 @@ function getRoles(list) {
     return roles;
 }
 
-function getAllRoles(){
-    fetch("/roles")
-        .then(res => res.json())
-        .then(roles => {
-            let temp = '';
-            roles.forEach(function (role){
-                temp +=`
-                <option value = "${role.id}">${role.name}<option>
-                `
-            });
-            document.getElementById("addRoles").innerHTML = temp;
-            document.getElementById("editRoles").innerHTML = temp;
-            document.getElementById("delRoles").innerHTML = temp;
 
-
-        });
-}
-getAllRoles()
 
 
 
