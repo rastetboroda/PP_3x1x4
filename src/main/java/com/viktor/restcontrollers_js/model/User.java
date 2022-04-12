@@ -4,10 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -34,7 +31,13 @@ public class User implements UserDetails {
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    Set<Role> roles;
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id")
+    )
+
+    Set<Role> roles = new HashSet<>();
 
     public User() {
 
@@ -140,7 +143,7 @@ public class User implements UserDetails {
         StringBuilder r = new StringBuilder();
         Iterator<Role> iterator = roles.iterator();
         while (iterator.hasNext()) {
-            r.append(iterator.next().getName()).append("   ");
+            r.append(iterator.next().getRole()).append("   ");
         }
         return r.toString();
     }

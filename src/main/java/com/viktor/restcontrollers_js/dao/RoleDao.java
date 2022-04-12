@@ -9,7 +9,7 @@ public interface RoleDao {
 
     List<Role> getAllRoles();
 
-    Role findById(Long id);
+    Role findById(int id);
 
     void saveRole(Role role);
 }

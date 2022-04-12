@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@RequestMapping("/api")
+//@RequestMapping("/api")
 @RestController
 public class UserRestController {
 
@@ -70,7 +70,6 @@ public class UserRestController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-//    _____________________________________________________________
 
     @GetMapping("/userInfo")
     public ResponseEntity<User> showUserById(@AuthenticationPrincipal User user) {
@@ -80,8 +79,9 @@ public class UserRestController {
     ResponseEntity<List<Role>>getAllRoles(){
         return new ResponseEntity<>(roleService.getAllRoles(), HttpStatus.OK);
     }
+
     @GetMapping("/roles/{id}")
-    ResponseEntity<Role> getRoleById(@PathVariable("id") Long id){
+    ResponseEntity<Role> getRoleById(@PathVariable("id") int id){
         return new ResponseEntity<>(roleService.findById(id), HttpStatus.OK);
     }
 
